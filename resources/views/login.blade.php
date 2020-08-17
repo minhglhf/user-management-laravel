@@ -9,7 +9,7 @@
 <div >
     <h1>~USER MANAGEMENT~</h1>
     <img src="../Public/img/user-management.jpg" alt="logo" width="120px" height="80px">
-    <div class="login">
+    <div class="login" >
         <form method="post" action="{{ url('login/login') }}">
             <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
 

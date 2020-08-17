@@ -5,6 +5,11 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Scopes\ActiveScope;
+use App\Scopes\SearchScope;
+use App\Scopes\EditScope;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -15,9 +20,23 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new ActiveScope);
+    }
+
+    use SearchScope;
+    use EditScope;
+
+    protected $table = 'user';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
-        'name', 'email', 'password',
+        'id', 'role', 'email', 'password','address', 'sex', 'name', 'delete_flag', 'birth'
     ];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -36,4 +55,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public $timestamps = false;
 }

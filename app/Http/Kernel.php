@@ -44,9 +44,15 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'login' => [
-            'login' => \App\Http\Middleware\LoginMiddleware::class,
+
+        'checkLogin' => [
+            'checkLogin' => \App\Http\Middleware\CheckLoginMiddleware::class,
         ],
+
+        'checkLogout' => [
+            'checkLogout' => \App\Http\Middleware\CheckLogoutMiddleware::class,
+        ]
+
     ];
 
     /**
@@ -67,6 +73,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'login' => \App\Http\Middleware\LoginMiddleware::class,
+        'checkLogout' => \App\Http\Middleware\CheckLogoutMiddleware::class,
+        'checkLogin' => \App\Http\Middleware\CheckLoginMiddleware::class,
     ];
 }
