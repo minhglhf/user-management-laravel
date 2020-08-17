@@ -32,3 +32,7 @@ Route::prefix('login')->namespace('Login')->group(function () {
     Route::get('/logout', 'LoginController@logout');
 });
 
+
+Auth::routes();
+
+Route::get('/user/index', 'User\UserController@index')->name('user/index');

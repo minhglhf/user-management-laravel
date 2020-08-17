@@ -6,6 +6,7 @@ namespace App\Scopes;
 trait EditScope {
     public function scopeEdit($query, $request)
     {
+
         if (isset($request->role)) {
             $query->update(['role' => $request->role]);
         }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\User;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -62,10 +63,6 @@ class UserController extends Controller
         return $this->userRepository->updateData($request);
     }
 
-    public function edit()
-    {
-        return 'edit controller';
-    }
 
     public function delete(Request $request)
     {
