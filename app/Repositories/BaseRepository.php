@@ -36,13 +36,16 @@ class BaseRepository implements RepositoryInterface
      * @inheritdoc
      */
 
-    public function getData($login = null)
+    public function getData($id = null)
     {
-        if ($login != null) {
-            return User::where('email', $login['email'])
-                ->get();
+        if ($id != null) {
+            return User::where('id', $id)->get();
         }
+//        if($restore != null){
+  //          return User::where('delete_flag', 1)->get();
+//        }
         return User::all();
+
     }
 
     public function setData(UserRequest $request)
@@ -77,15 +80,25 @@ class BaseRepository implements RepositoryInterface
 
     public function deleteData($id)
     {
-        return User::where('id', $id)->update(['delete_flag' => 1]);
+        User::where('id', $id)->update(['delete_flag' => 1]);
+        return $this->success();
     }
 
     public function restoreData($id)
     {
-        return User::where('id', $id)->update(['delete_flag' => 0]);
+        User::where('id', $id)->update(['delete_flag' => 0]);
+        return $this->success();
     }
 
     public function success(){
         return 'success <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    }
+
+    public function fail(){
+        return 'fail <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    }
+
+    public function denied_permission(){
+        return 'not your role <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
     }
 }

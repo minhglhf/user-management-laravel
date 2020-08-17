@@ -30,22 +30,10 @@ class UserController extends Controller
 
     public function showUser()
     {
-        return view('show_user')->with(['users' => $this->userRepository->getData()]);
-    }
-
-    public function info()
-    {
-        return view('user_create');
-    }
-
-    public function infoSearch()
-    {
-        return view('user_search');
-    }
-
-    public function infoUpdate()
-    {
-        return view('user_update')->with(['users' => $this->userRepository->getData(Session::get('login'))]);
+        if (Gate::allows('view-user')) {
+            return view('show_user')->with(['users' => $this->userRepository->getData()]);
+        }
+        return $this->userRepository->denied_permission();
     }
 
     public function store(UserRequest $request)
@@ -63,14 +51,51 @@ class UserController extends Controller
         return $this->userRepository->updateData($request);
     }
 
+    public function edit(Request $request)
+    {
+        if (Gate::allows('edit-user')) {
+            return $this->infoUpdate($request->id);
+        }
+        return $this->userRepository->denied_permission();
+    }
 
     public function delete(Request $request)
     {
-        return $this->userRepository->deleteData($request->id);
+        if (Gate::allows('delete-user')) {
+            return $this->userRepository->deleteData($request->id);
+        }
+        return $this->userRepository->denied_permission();
     }
 
     public function restore(Request $request)
     {
-        return $this->userRepository->restoreData($request->id);
+        if (Gate::allows('restore-user')) {
+          //  return $this->userRepository->restoreData($request->id);
+            return  view('show_user')->with(['users' => $this->userRepository->getData()]);
+        }
+        return $this->userRepository->denied_permission();
+    }
+
+    public function pickId(Request $request){
+        return view('chooseAction')->with(['user_id' =>  $request->user_id]);
+    }
+
+    public function info()
+    {
+        if (Gate::allows('create-user')) {
+            return view('user_create');
+        }
+        return $this->userRepository->denied_permission();
+    }
+
+    public function infoSearch()
+    {
+        return view('user_search');
+    }
+
+    public function infoUpdate($id = null)
+    {
+        if($id != null) return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+        return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
     }
 }

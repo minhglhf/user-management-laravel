@@ -21,9 +21,12 @@ Route::prefix('user')->namespace('User')->group(function () {
     Route::post('/store', 'UserController@store')->name('user.store');
     Route::get('/search', 'UserController@infoSearch')->name('user.search');
     Route::post('/find', 'UserController@find')->name('user.find');
+    Route::post('/pickId', 'UserController@pickId')->name('user.pickId');
     Route::get('/infoUpdate', 'UserController@infoUpdate')->name('user.infoUpdate');
     Route::post('/update', 'UserController@update')->name('user.update');
-    Route::get('/deleter', 'UserController@delete')->name('user.delete');
+    Route::post('/edit', 'UserController@edit')->name('user.edit');
+    Route::post('/delete', 'UserController@delete')->name('user.delete');
+    Route::get('/restore', 'UserController@restore')->name('user.restore');
 });
 
 Route::prefix('login')->namespace('Login')->group(function () {
