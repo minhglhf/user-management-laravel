@@ -16,9 +16,9 @@ class CheckLoginMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check()){
-            return redirect('user/index');
-        }
-        return $next($request);
+//        if(Auth::check()){
+//            return redirect('user/index');
+//        }
+//        return $next($request);
     }
 }

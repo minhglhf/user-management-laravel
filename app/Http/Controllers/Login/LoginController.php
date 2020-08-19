@@ -15,17 +15,6 @@ use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-    public function index()
-    {
-        return view('home');
-    }
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-
     public function Logout()
     {
         Auth::logout();
