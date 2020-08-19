@@ -3,9 +3,11 @@
 namespace App\Repositories;
 
 use App\Http\Requests\UserRequest;
+use App\Mail\TestMail;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -19,7 +21,8 @@ class BaseRepository implements RepositoryInterface
     /**
      * @var Model
      */
-    protected $model;
+    protected $_originModel;
+    protected $_model;
 
     /**
      * BaseRepository constructor.
@@ -29,7 +32,17 @@ class BaseRepository implements RepositoryInterface
 
     public function __construct(Model $model)
     {
-        $this->model = $model;
+        $this->_originModel = $model;
+    }
+
+    public function getModel()
+    {
+        return $this->_model;
+    }
+
+    public function setModel($model)
+    {
+        $this->_model = $model;
     }
 
     /**
@@ -39,13 +52,27 @@ class BaseRepository implements RepositoryInterface
     public function getData($id = null)
     {
         if ($id != null) {
-            return User::where('id', $id)->get();
+            return $this->getBuilder(['id' => $id])->get();
         }
-//        if($restore != null){
-  //          return User::where('delete_flag', 1)->get();
-//        }
-        return User::all();
+        return $this->getBuilder()->all();
+    }
 
+    public function getBuilder($conditions = null, $compare = '=')
+    {
+        $this->resetModel();
+        $model = $this->getModel();
+
+        if ($conditions != null) {
+            foreach ($conditions as $field => $value) {
+                $model = $model::where($field, $compare , $value);
+            }
+        }
+        return $model;
+    }
+
+    public function resetModel()
+    {
+        $this->setModel($this->_originModel);
     }
 
     public function setData(UserRequest $request)
@@ -59,20 +86,20 @@ class BaseRepository implements RepositoryInterface
             'name' => $request->name,
             'birth' => $request->birth,
         ];
-        User::create($customData);
-        return $this->success();
+        $newUser = User::create($customData);
+        return $this->sendMailToAdmin($newUser);
     }
 
     public function updateData(UserRequest $request)
     {
-        User::where('id', '=', $request->id)
+        $this->getBuilder(['id' => $request->id])
             ->edit($request);
         return $this->success();
     }
 
     public function findData(Request $request)
     {
-        $data = User::where('delete_flag', '=', 0)
+        $data = $this->getBuilder(['delete_flag' => 0])
             ->search($request)
             ->get();
         return $data;
@@ -80,25 +107,43 @@ class BaseRepository implements RepositoryInterface
 
     public function deleteData($id)
     {
-        User::where('id', $id)->update(['delete_flag' => 1]);
+        $this->getBuilder(['id' => $id])->update(['delete_flag' => 1]);
         return $this->success();
     }
 
     public function restoreData($id)
     {
-        User::where('id', $id)->update(['delete_flag' => 0]);
+        $this->getBuilder(['id' => $id])->update(['delete_flag' => 0]);
         return $this->success();
     }
 
-    public function success(){
-        return 'success <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    public function sendMailToAdmin($newUser)
+    {
+        foreach($this->getBuilder(['role' => 3], '<')->get() as $user){
+            \Mail::to($user->email)->send(new TestMail([
+                'title' => 'Accout Created',
+                'body'  => 'an account email = '. $newUser->email . ' id = ' .$newUser->id
+                    . '  had been created by ' . Auth::user()->name
+            ]));
+        }
+        return $this->success('email send');
     }
 
-    public function fail(){
-        return 'fail <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    public function success($message = null)
+    {
+        return $message . 'success <br>';
+
     }
 
-    public function denied_permission(){
-        return 'not your role <br> <a href=" ../user/index"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    public function fail()
+    {
+        return 'fail <br> <a href="{{ route(\'user.index\')}}"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
     }
+
+    public function denied_permission()
+    {
+        return 'not your role <br> <a href="{{ route(\'user.index\')}}"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+    }
+
+
 }

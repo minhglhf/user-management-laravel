@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', 'Login\LoginController@index')->name("login_page")->middleware('checkLogin');
 
+//
+//Route::prefix('photos')->namespace('User')->group(function () {
+//    Route::get('/', 'PhotoController@index')->name('user.index')->middleware('checkLogout');
+//    Route::get('/create', 'PhotoController@create')->name('user.create');
+//    Route::post('/store', 'PhotoController@store')->name('user.store');
+//    Route::get('/show/{id}', 'PhotoController@show')->name('user.show');
+//    Route::put('/update/{id}', 'PhotoController@update')->name('user.update');
+//    Route::get('/{id}/edit', 'PhotoController@edit')->name('user.edit');
+//    Route::delete('/delete/{id}', 'PhotoController@delete')->name('user.delete');
+//});
+
 Route::prefix('user')->namespace('User')->group(function () {
     Route::get('/index', 'UserController@index')->name('user.index')->middleware('checkLogout');
     Route::get('/showUser', 'UserController@showUser')->name('user.showUser');
@@ -23,10 +34,11 @@ Route::prefix('user')->namespace('User')->group(function () {
     Route::post('/find', 'UserController@find')->name('user.find');
     Route::post('/pickId', 'UserController@pickId')->name('user.pickId');
     Route::get('/infoUpdate', 'UserController@infoUpdate')->name('user.infoUpdate');
-    Route::post('/update', 'UserController@update')->name('user.update');
-    Route::post('/edit', 'UserController@edit')->name('user.edit');
-    Route::post('/delete', 'UserController@delete')->name('user.delete');
-    Route::get('/restore', 'UserController@restore')->name('user.restore');
+    Route::put('/update', 'UserController@update')->name('user.update');
+    Route::post('/edit/{id}', 'UserController@edit')->name('user.edit');
+    Route::delete('/delete/{id}', 'UserController@delete')->name('user.delete');
+    Route::post('/restore', 'UserController@restore')->name('user.restore');
+    Route::get('/sendMail','UserController@sendMail')->name('user.sendMail');
 });
 
 Route::prefix('login')->namespace('Login')->group(function () {
@@ -34,6 +46,8 @@ Route::prefix('login')->namespace('Login')->group(function () {
     Route::post('/login', 'LoginController@Login');
     Route::get('/logout', 'LoginController@logout');
 });
+
+
 
 
 Auth::routes();

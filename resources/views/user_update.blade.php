@@ -1,6 +1,8 @@
 @foreach($users as $user)
-    <form method="post" action="{{ route('user.update') }}">
+    <form method="POST" action="{{ route('user.update') }}">
+        @method('PUT')
         @csrf
+        <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
         <input type="text" name="id" value="{{ $user->id }}" readonly>

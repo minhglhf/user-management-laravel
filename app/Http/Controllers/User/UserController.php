@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\User;
+
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
-use App\PostUser;
 use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Session;
+use App\Mail\TestMail;
 
 class UserController extends Controller
 {
@@ -51,18 +52,18 @@ class UserController extends Controller
         return $this->userRepository->updateData($request);
     }
 
-    public function edit(Request $request)
+    public function edit($id)
     {
         if (Gate::allows('edit-user')) {
-            return $this->infoUpdate($request->id);
+            return $this->infoUpdate($id);
         }
         return $this->userRepository->denied_permission();
     }
 
-    public function delete(Request $request)
+    public function delete($id)
     {
         if (Gate::allows('delete-user')) {
-            return $this->userRepository->deleteData($request->id);
+            return $this->userRepository->deleteData($id);
         }
         return $this->userRepository->denied_permission();
     }
@@ -70,14 +71,14 @@ class UserController extends Controller
     public function restore(Request $request)
     {
         if (Gate::allows('restore-user')) {
-          //  return $this->userRepository->restoreData($request->id);
-            return  view('show_user')->with(['users' => $this->userRepository->getData()]);
+            return view('show_user')->with(['users' => $this->userRepository->getData('restore')]);
         }
         return $this->userRepository->denied_permission();
     }
 
-    public function pickId(Request $request){
-        return view('chooseAction')->with(['user_id' =>  $request->user_id]);
+    public function pickId(Request $request)
+    {
+        return view('chooseAction')->with(['user_id' => $request->user_id]);
     }
 
     public function info()
@@ -95,7 +96,12 @@ class UserController extends Controller
 
     public function infoUpdate($id = null)
     {
-        if($id != null) return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+        if ($id != null) {
+            //if (Gate::allows('edit-lower-user', Post::find($id))) {
+            return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+            //} else return $this->userRepository->denied_permission();
+        }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
     }
+
 }

@@ -21,4 +21,5 @@ interface RepositoryInterface
     public function deleteData($id);
     public function restoreData($id);
     public function denied_permission();
+    public function sendMailToAdmin($newUser);
 }
