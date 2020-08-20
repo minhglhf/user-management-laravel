@@ -7,3 +7,5 @@
 <a href="{{ url('user/restore') }}"><input type="submit" name="restore" value="restore"></a>
 <br><br>
 
+<h1>You are login as: {{ $auth_role }}</h1>
+

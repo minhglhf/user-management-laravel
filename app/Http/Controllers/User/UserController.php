@@ -17,6 +17,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Session;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Config;
 
 //use Illuminate\Validation\Validator;
 
@@ -32,13 +33,12 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('user');
+        return view('user')->with(['auth_role' =>  Config::get('common.' . Auth::user()->role) ]);
     }
 
     public function showUser()
     {
-        if ($this->checkRole('view-user'))
-            return view('show_user')->with(['users' => $this->userRepository->getData()]);
+        return view('show_user')->with(['users' => $this->userRepository->getData()]);
     }
 
     public function store(UserRequest $request)
@@ -103,9 +103,7 @@ class UserController extends Controller
     public function infoUpdate($id = null)
     {
         if ($id != null) {
-            //if (Gate::allows('edit-lower-user', Post::find($id))) {
             return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
-            //} else return $this->userRepository->denied_permission();
         }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
     }

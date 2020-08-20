@@ -36,6 +36,7 @@ class UserRequest extends FormRequest
                 new EmailExistRule()
             ] ,
             'password' => 'required|min:8',
+            'confirmPassword' => 'same:password',
             'sex' => 'nullable|integer|min:0|max:1',
             'name' => 'nullable|regex:/^[a-zA-Z ]*$/',
             'birth' => 'nullable|date|date_format:Y-m-d',
@@ -53,6 +54,7 @@ class UserRequest extends FormRequest
             'email.email' => 'Email phải đúng định dạng',
             'password.required' => 'Mật khẩu là  bắt buộc',
             'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
+            'confirmPassword.same' => 'Mật khẩu không trùng khớp',
             'sex.integer' => 'giới tính phải là integer',
             'sex.min' => 'giới tính chấp nhận: 0 = Male, 1 = Female',
             'sex.max' => 'giới tính chấp nhận: 0 = Male, 1 = Female',

@@ -28,28 +28,43 @@
                     <td>{{ $user->sex }}</td>
                     <td>{{ $user->birth }}</td>
                     <td>
-                        <form method="post" action="{{ route('user.delete', ['id' => $user->id]) }}">
+                        <form class="delete" method="post" action="{{ route('user.delete', ['id' => $user->id]) }}">
                             {{ method_field('DELETE') }}
                             @csrf
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                            <button type="submit" id="delete" name="delete_id" value="{{ $user->id }}">delete</button>
+                            <button type="submit" id="delete" name="delete_id"
+                                    onclick="return confirm('Sure Want Delete?')" value="{{ $user->id }}">delete
+                            </button>
                         </form>
                     </td>
                     <td>
-                        <form method="post" action="{{ route('user.edit', ['id' => $user->id]) }}">
+                        <form class="edit" method="post" action="{{ route('user.edit', ['id' => $user->id]) }}">
                             {{ method_field('POST') }}
                             @csrf
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                            <button type="submit" id="edit" name="edit_id" value="{{ $user->id }}">edit</button>
+                            <button type="submit" id="edit" name="edit_id" value="{{ $user->id }}">edit
+                            </button>
                         </form>
+
                     </td>
                 </tr>
             @endforeach
         </table>
-{{--                        {{ $users->links() }}--}}
+        {{--                        {{ $users->links() }}--}}
     @endif
     @if (!empty($users))
     @endif
 </div>
 
+{{--<script>--}}
+{{--    $("delete").on("submit", function(){--}}
+{{--        return confirm("Are you sure?");--}}
+{{--    });--}}
+{{--</script>--}}
+
+{{--<script>--}}
+{{--    $("edit").on("submit", function(){--}}
+{{--        return confirm("Are you sure?");--}}
+{{--    });--}}
+{{--</script>--}}
 

@@ -32,13 +32,15 @@
                             {{ method_field('POST') }}
                             @csrf
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                            <button type="submit" id="restore" name="restore_id" value="{{ $user->id }}">restore</button>
+                            <button type="submit" id="restore" name="restore_id"
+                                    onclick="return confirm('Sure Want restore?')" value="{{ $user->id }}">restore
+                            </button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </table>
-{{--                        {{ $users->links() }}--}}
+        {{--                        {{ $users->links() }}--}}
     @endif
     @if (!empty($users))
     @endif

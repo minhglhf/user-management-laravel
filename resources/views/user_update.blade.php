@@ -38,6 +38,6 @@
             <p style="color: red">* {{ $errors->first('birth') }}</p>
         @endif
         <br>
-        <input type="submit" name='submit' value='update'>
+        <button type="submit" name='submit' value='update' onclick="return confirm('Save Change?')">Update</button>
     </form>
 @endforeach

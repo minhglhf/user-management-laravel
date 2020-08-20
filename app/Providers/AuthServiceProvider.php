@@ -5,8 +5,8 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\UserPolicy;
-use App\PostUser;
 use App\User;
+use App\Post;
 
 
 class AuthServiceProvider extends ServiceProvider
@@ -30,24 +30,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('view-user', function ($user) {
-            return $user->role != 3;
-        });
-
         Gate::define('create-user', function ($user) {
-            return $user->role != 3;
+            return $user->role < 3;
         });
 
         Gate::define('delete-user', function ($user) {
-            return $user->role != 3;
+            return $user->role < 3;
         });
 
         Gate::define('restore-user', function ($user) {
-            return $user->role != 3;
+            return $user->role < 3;
         });
 
         Gate::define('edit-user', function ($user) {
-            return $user->role != 3;
+            return $user->role < 3;
         });
 
         Gate::define('edit-lower-role', function ($user, $post) {

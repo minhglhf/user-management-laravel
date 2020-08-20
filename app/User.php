@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Scopes\ActiveScope;
 use App\Scopes\SearchScope;
 use App\Scopes\EditScope;
+use App\Post;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 

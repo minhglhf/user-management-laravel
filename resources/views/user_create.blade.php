@@ -12,9 +12,14 @@
         <p style="color: red">* {{ $errors->first('email') }}</p>
     @endif
     <br>
-    <input type="text" placeholder="password" name="password" value="{{ old('password') }}">
+    <input type="password" placeholder="password" name="password" value="{{ old('password') }}">
     @if($errors->has('password'))
         <p style="color: red">* {{ $errors->first('password') }}</p>
+    @endif
+    <br>
+    <input type="password" placeholder="confirmPassword" name="confirmPassword" value="{{ old('confirmPassword') }}">
+    @if($errors->has('confirmPassword'))
+        <p style="color: red">* {{ $errors->first('confirmPassword') }}</p>
     @endif
     <br>
     <input type="text" placeholder="address" name="address" value="{{ old('address') }}">
