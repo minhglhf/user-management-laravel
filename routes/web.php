@@ -34,7 +34,7 @@ Route::prefix('user')->namespace('User')->group(function () {
     Route::post('/find', 'UserController@find')->name('user.find');
     Route::get('/show', 'UserController@show')->name('user.show');
     Route::post('/pickId', 'UserController@pickId')->name('user.pickId');
-    Route::get('/infoUpdate', 'UserController@infoUpdate')->name('user.infoUpdate');
+    Route::get('/infoUpdate/{id?}', 'UserController@infoUpdate')->name('user.infoUpdate');
     Route::put('/update', 'UserController@update')->name('user.update');
     Route::post('/edit/{id}', 'UserController@edit')->name('user.edit');
     Route::delete('/delete/{id}', 'UserController@delete')->name('user.delete');

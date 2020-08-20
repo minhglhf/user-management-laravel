@@ -17,6 +17,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Session;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Validator;
+
 //use Illuminate\Validation\Validator;
 
 class UserController extends Controller
@@ -47,7 +48,7 @@ class UserController extends Controller
 
     public function find(Request $request)
     {
-        return view('show_user')->with(['users' =>$this->userRepository->findData($request)]);
+        return view('show_user')->with(['users' => $this->userRepository->findData($request)]);
     }
 
     public function update(UpdateRequest $request)
@@ -57,7 +58,8 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        if ($this->checkRole('edit-user')) return $this->infoUpdate($id);
+        if ($this->checkRole('edit-user')) return redirect()->route('user.infoUpdate',
+            ['id' => $id]);
         return $this->userRepository->denied_permission();
     }
 
@@ -102,7 +104,7 @@ class UserController extends Controller
     {
         if ($id != null) {
             //if (Gate::allows('edit-lower-user', Post::find($id))) {
-                return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+            return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
             //} else return $this->userRepository->denied_permission();
         }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
