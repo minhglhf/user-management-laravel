@@ -51,6 +51,10 @@ class Kernel extends HttpKernel
 
         'checkLogout' => [
             'checkLogout' => \App\Http\Middleware\CheckLogoutMiddleware::class,
+        ],
+
+        'submit' => [
+            'submit' => \App\Http\Middleware\SubmitMiddlerware::class,
         ]
 
     ];
@@ -75,5 +79,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'checkLogout' => \App\Http\Middleware\CheckLogoutMiddleware::class,
         'checkLogin' => \App\Http\Middleware\CheckLoginMiddleware::class,
+        'submit' => \App\Http\Middleware\SubmitMiddlerware::class,
     ];
 }

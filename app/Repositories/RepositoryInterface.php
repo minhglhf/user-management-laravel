@@ -16,10 +16,11 @@ interface RepositoryInterface
 {
     public function getData($id = null);
     public function setData(UserRequest $request);
-    public function updateData(UserRequest $request);
+    public function updateData(Request $request);
     public function findData(Request $request);
     public function deleteData($id);
     public function restoreData($id);
     public function denied_permission();
     public function sendMailToAdmin($newUser);
+    public function getSoftDeleteData();
 }

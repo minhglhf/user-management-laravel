@@ -11,9 +11,12 @@ use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Route;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Session;
 use App\Mail\TestMail;
+use Illuminate\Support\Facades\Validator;
+//use Illuminate\Validation\Validator;
 
 class UserController extends Controller
 {
@@ -32,11 +35,14 @@ class UserController extends Controller
 
     public function showUser()
     {
-        if (Gate::allows('view-user')) {
+        if ($this->checkRole('view-user'))
             return view('show_user')->with(['users' => $this->userRepository->getData()]);
-        }
-        return $this->userRepository->denied_permission();
     }
+
+//    public function show($id)
+//    {
+//        return view('show_user')->with(['users' => $id]);
+//    }
 
     public function store(UserRequest $request)
     {
@@ -45,48 +51,49 @@ class UserController extends Controller
 
     public function find(Request $request)
     {
-        return view('show_user')->with(['users' => $this->userRepository->findData($request)]);
+        return view('show_user')->with(['users' =>$this->userRepository->findData($request)]);
     }
 
-    public function update(UserRequest $request)
+    public function update(Request $request)
     {
         return $this->userRepository->updateData($request);
     }
 
     public function edit($id)
     {
-        if (Gate::allows('edit-user')) {
-            return $this->infoUpdate($id);
-        }
+        if ($this->checkRole('edit-user')) return $this->infoUpdate($id);
         return $this->userRepository->denied_permission();
     }
 
     public function delete($id)
     {
-        if (Gate::allows('delete-user')) {
-            return $this->userRepository->deleteData($id);
-        }
+        if ($this->checkRole('create-user')) return $this->userRepository->deleteData($id);
         return $this->userRepository->denied_permission();
     }
 
-    public function restore(Request $request)
+    public function restore()
     {
-        if (Gate::allows('restore-user')) {
-            return view('show_user')->with(['users' => $this->userRepository->getData('restore')]);
-        }
+        if ($this->checkRole('restore-user')) return view('show_soft_delete_user')
+            ->with(['users' => $this->userRepository->getSoftDeleteData()]);
         return $this->userRepository->denied_permission();
     }
 
-    public function pickId(Request $request)
+    public function _postRestore($id)
     {
-        return view('chooseAction')->with(['user_id' => $request->user_id]);
+        return $this->userRepository->restoreData($id);
+    }
+
+    public function checkRole($roleName)
+    {
+        if (Gate::allows($roleName)) {
+            return true;
+        }
+        return false;
     }
 
     public function info()
     {
-        if (Gate::allows('create-user')) {
-            return view('user_create');
-        }
+        if ($this->checkRole('create-user')) return view('user_create');
         return $this->userRepository->denied_permission();
     }
 
@@ -99,10 +106,9 @@ class UserController extends Controller
     {
         if ($id != null) {
             //if (Gate::allows('edit-lower-user', Post::find($id))) {
-            return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+                return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
             //} else return $this->userRepository->denied_permission();
         }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
     }
-
 }

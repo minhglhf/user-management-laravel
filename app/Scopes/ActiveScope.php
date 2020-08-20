@@ -18,4 +18,11 @@ class ActiveScope implements Scope
     {
         $builder->where('delete_flag', '=', 0);
     }
+
+    public function extend(Builder $builder)
+        {
+            $builder->macro('withYouths', function (Builder $builder) {
+                return $builder->withoutGlobalScope($this);
+            });
+        }
 }

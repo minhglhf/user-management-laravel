@@ -24,7 +24,7 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::addGlobalScope(new ActiveScope);
+       // static::addGlobalScope(new ActiveScope);
     }
 
     use SearchScope;

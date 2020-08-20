@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 use Illuminate\Routing\Route;
+use App\Rules\EmailExistRule;
 
 class UserRequest extends FormRequest
 {
@@ -23,12 +24,17 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public  function rules()
     {
 
         return [
-            'role' => 'required|integer|min:1|max:3',
-            'email' => 'required|email',
+            'role' => [
+                'required','integer','min:1','max:3',
+            ],
+            'email' => [
+                'required','email',
+                new EmailExistRule()
+            ] ,
             'password' => 'required|min:8',
             'sex' => 'nullable|integer|min:0|max:1',
             'name' => 'nullable|regex:/^[a-zA-Z ]*$/',
@@ -36,7 +42,7 @@ class UserRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public  function messages()
     {
         return [
             'role.required' => 'Role là bắt buộc',
@@ -53,5 +59,6 @@ class UserRequest extends FormRequest
             'name' => 'tên chỉ chấp nhận kí tự và khoảng trắng',
             'birth' => 'không đúng định dạng YYYY-MM-DD',
         ];
+
     }
 }

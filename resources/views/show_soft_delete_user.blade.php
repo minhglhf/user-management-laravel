@@ -28,19 +28,11 @@
                     <td>{{ $user->sex }}</td>
                     <td>{{ $user->birth }}</td>
                     <td>
-                        <form method="post" action="{{ route('user.delete', ['id' => $user->id]) }}">
-                            {{ method_field('DELETE') }}
-                            @csrf
-                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                            <button type="submit" id="delete" name="delete_id" value="{{ $user->id }}">delete</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="post" action="{{ route('user.edit', ['id' => $user->id]) }}">
+                        <form method="post" action="{{ route('user.postRestore', ['id' => $user->id]) }}">
                             {{ method_field('POST') }}
                             @csrf
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                            <button type="submit" id="edit" name="edit_id" value="{{ $user->id }}">edit</button>
+                            <button type="submit" id="restore" name="restore_id" value="{{ $user->id }}">restore</button>
                         </form>
                     </td>
                 </tr>
@@ -51,5 +43,3 @@
     @if (!empty($users))
     @endif
 </div>
-
-

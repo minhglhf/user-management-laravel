@@ -5,11 +5,13 @@ namespace App\Repositories;
 use App\Http\Requests\UserRequest;
 use App\Mail\TestMail;
 use App\User;
+use App\Scopes;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\AcceptHeader;
 
 /**
  * Class BaseRepository
@@ -54,7 +56,7 @@ class BaseRepository implements RepositoryInterface
         if ($id != null) {
             return $this->getBuilder(['id' => $id])->get();
         }
-        return $this->getBuilder()->all();
+        return $this->getBuilder(['delete_flag' => 0])->get();
     }
 
     public function getBuilder($conditions = null, $compare = '=')
@@ -64,7 +66,7 @@ class BaseRepository implements RepositoryInterface
 
         if ($conditions != null) {
             foreach ($conditions as $field => $value) {
-                $model = $model::where($field, $compare , $value);
+                $model = $model::where($field, $compare, $value);
             }
         }
         return $model;
@@ -90,7 +92,7 @@ class BaseRepository implements RepositoryInterface
         return $this->sendMailToAdmin($newUser);
     }
 
-    public function updateData(UserRequest $request)
+    public function updateData(Request $request)
     {
         $this->getBuilder(['id' => $request->id])
             ->edit($request);
@@ -111,6 +113,13 @@ class BaseRepository implements RepositoryInterface
         return $this->success();
     }
 
+    public function getSoftDeleteData()
+    {
+        return $this->getBuilder(['delete_flag' => 1])->get();
+//        $data = User::withYouths($this->getBuilder(['delete_flag' => 1]))->get();
+//        return $data;
+    }
+
     public function restoreData($id)
     {
         $this->getBuilder(['id' => $id])->update(['delete_flag' => 0]);
@@ -119,10 +128,10 @@ class BaseRepository implements RepositoryInterface
 
     public function sendMailToAdmin($newUser)
     {
-        foreach($this->getBuilder(['role' => 3], '<')->get() as $user){
+        foreach ($this->getBuilder(['role' => 3], '<')->get() as $user) {
             \Mail::to($user->email)->send(new TestMail([
                 'title' => 'Accout Created',
-                'body'  => 'an account email = '. $newUser->email . ' id = ' .$newUser->id
+                'body' => 'an account email = ' . $newUser->email . ' id = ' . $newUser->id
                     . '  had been created by ' . Auth::user()->name
             ]));
         }
@@ -132,17 +141,16 @@ class BaseRepository implements RepositoryInterface
     public function success($message = null)
     {
         return $message . 'success <br>';
-
     }
 
-    public function fail()
+    public function fail($message = null)
     {
-        return 'fail <br> <a href="{{ route(\'user.index\')}}"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+        return $message . 'fail <br>';
     }
 
     public function denied_permission()
     {
-        return 'not your role <br> <a href="{{ route(\'user.index\')}}"><input type="submit" name="backToHomePage" value="back to home pager"></a>';
+        return 'not your role <br> ';
     }
 
 
