@@ -103,7 +103,9 @@ class UserController extends Controller
     public function infoUpdate($id = null)
     {
         if ($id != null) {
-            return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+            if (Gate::allows('edit-lower-role', User::find($id)->role)) {
+                return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
+            }
         }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
     }

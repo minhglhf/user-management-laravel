@@ -6,8 +6,6 @@
     <br>
     <input type="text" placeholder="email" name="email">
     <br>
-    <input type="text" placeholder="password" name="password">
-    <br>
     <input type="text" placeholder="address" name="address">
     <br>
     <input type="text" placeholder="sex" name="sex">
