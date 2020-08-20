@@ -26,9 +26,9 @@ class EmailExistRule implements Rule
      */
     public function passes($attribute, $value)
     {
-//        $data = User::where('delete_flag', 0)->where('email', $value)->count();
-//        if($data == 1) return false;
-        return false;
+        $data = User::where('delete_flag', 0)->where('email', $value)->count();
+        if($data == 1) return false;
+        return true;
     }
 
     /**

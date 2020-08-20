@@ -7,20 +7,11 @@ use App\Http\Requests\UserRequest;
 
 trait EditScope
 {
-    public function scopeEdit($query,  $request)
+    public function scopeEdit($query, $request)
     {
-
         if (isset($request->role)) {
-            $validator = Validator::make($request->role, ['role' => 'required|integer|min:1|max:3'],['role.required' => 'Role là bắt buộc',
-            'role.integer' => 'Role phải là integer',
-            'role.min' => 'Role chấp nhận: 1 = superAdmin, 2 = Admin, 3 = user',
-            'role.max' => 'Role chấp nhận: 1 = superAdmin, 2 = Admin, 3 = user']);
 
-            if ($validator->fails()) {
-                return redirect()->route('user.infoUpdate')
-                    ->withErrors($validator)->withInput();
-            }
-            else $query->update(['role' => $request->role]);
+            $query->update(['role' => $request->role]);
         }
 
         if (isset($request->email)) {

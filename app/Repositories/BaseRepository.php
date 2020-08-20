@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UpdateRequest;
 use App\Mail\TestMail;
 use App\User;
 use App\Scopes;
@@ -92,7 +93,7 @@ class BaseRepository implements RepositoryInterface
         return $this->sendMailToAdmin($newUser);
     }
 
-    public function updateData(Request $request)
+    public function updateData(UpdateRequest $request)
     {
         $this->getBuilder(['id' => $request->id])
             ->edit($request);

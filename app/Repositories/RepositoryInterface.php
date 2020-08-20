@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UpdateRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ interface RepositoryInterface
 {
     public function getData($id = null);
     public function setData(UserRequest $request);
-    public function updateData(Request $request);
+    public function updateData(UpdateRequest $request);
     public function findData(Request $request);
     public function deleteData($id);
     public function restoreData($id);

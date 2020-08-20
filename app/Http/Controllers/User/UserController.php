@@ -11,6 +11,7 @@ use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UpdateRequest;
 use Illuminate\Support\Facades\Route;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Session;
@@ -39,11 +40,6 @@ class UserController extends Controller
             return view('show_user')->with(['users' => $this->userRepository->getData()]);
     }
 
-//    public function show($id)
-//    {
-//        return view('show_user')->with(['users' => $id]);
-//    }
-
     public function store(UserRequest $request)
     {
         return $this->userRepository->setData($request);
@@ -54,7 +50,7 @@ class UserController extends Controller
         return view('show_user')->with(['users' =>$this->userRepository->findData($request)]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateRequest $request)
     {
         return $this->userRepository->updateData($request);
     }
