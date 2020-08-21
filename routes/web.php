@@ -32,7 +32,7 @@ Route::prefix('user')->namespace('User')->group(function () {
     Route::post('/store', 'UserController@store')->name('user.store');
     Route::get('/search', 'UserController@infoSearch')->name('user.search');
     Route::post('/find', 'UserController@find')->name('user.find');
-    Route::get('/show', 'UserController@show')->name('user.show');
+    Route::get('/show/{data}', 'UserController@show')->name('user.show');
     Route::post('/pickId', 'UserController@pickId')->name('user.pickId');
     Route::get('/infoUpdate/{id?}', 'UserController@infoUpdate')->name('user.infoUpdate');
     Route::put('/update', 'UserController@update')->name('user.update');

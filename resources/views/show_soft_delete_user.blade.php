@@ -40,7 +40,7 @@
                 </tr>
             @endforeach
         </table>
-        {{--                        {{ $users->links() }}--}}
+{{--            {{ $users->links("pagination::bootstrap-4")}}--}}
     @endif
     @if (!empty($users))
     @endif

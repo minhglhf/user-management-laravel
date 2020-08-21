@@ -50,21 +50,9 @@
                 </tr>
             @endforeach
         </table>
-        {{--                        {{ $users->links() }}--}}
+{{--            {{ $users->links("pagination::bootstrap-4")}}--}}
     @endif
-    @if (!empty($users))
-    @endif
+
 </div>
 
-{{--<script>--}}
-{{--    $("delete").on("submit", function(){--}}
-{{--        return confirm("Are you sure?");--}}
-{{--    });--}}
-{{--</script>--}}
-
-{{--<script>--}}
-{{--    $("edit").on("submit", function(){--}}
-{{--        return confirm("Are you sure?");--}}
-{{--    });--}}
-{{--</script>--}}
 

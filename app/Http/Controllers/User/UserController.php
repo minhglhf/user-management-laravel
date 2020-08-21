@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('user')->with(['auth_role' =>  Config::get('common.' . Auth::user()->role) ]);
+        return view('user')->with(['auth_role' => Config::get('common.' . Auth::user()->role)]);
     }
 
     public function showUser()
@@ -45,6 +45,7 @@ class UserController extends Controller
     {
         return $this->userRepository->setData($request);
     }
+
 
     public function find(Request $request)
     {
@@ -58,14 +59,19 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        if ($this->checkRole('edit-user')) return redirect()->route('user.infoUpdate',
-            ['id' => $id]);
+        if ($this->checkRole('edit-user'))
+            return redirect()->route('user.infoUpdate',
+                ['id' => $id]);
         return $this->userRepository->denied_permission();
     }
 
     public function delete($id)
     {
-        if ($this->checkRole('create-user')) return $this->userRepository->deleteData($id);
+        if ($this->checkRole('create-user')) {
+            if ($this->rolePermission($id)) {
+                return $this->userRepository->deleteData($id);
+            }
+        }
         return $this->userRepository->denied_permission();
     }
 
@@ -78,7 +84,10 @@ class UserController extends Controller
 
     public function _postRestore($id)
     {
-        return $this->userRepository->restoreData($id);
+        if ($this->rolePermission($id)) {
+            return $this->userRepository->restoreData($id);
+        }
+        return $this->userRepository->denied_permission();
     }
 
     public function checkRole($roleName)
@@ -103,10 +112,16 @@ class UserController extends Controller
     public function infoUpdate($id = null)
     {
         if ($id != null) {
-            if (Gate::allows('edit-lower-role', User::find($id)->role)) {
+            if ($this->rolePermission($id)) {
                 return view('user_update')->with(['users' => $this->userRepository->getData($id)]);
-            }
+            } else return $this->userRepository->denied_permission();
         }
         return view('user_update')->with(['users' => $this->userRepository->getData(Auth::user()->id)]);
+    }
+
+    public function rolePermission($id)
+    {
+        if (Auth::user()->role < User::find($id)->role) return true;
+        return false;
     }
 }

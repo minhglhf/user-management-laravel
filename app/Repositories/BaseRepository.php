@@ -141,7 +141,8 @@ class BaseRepository implements RepositoryInterface
 
     public function success($message = null)
     {
-        return $message . 'success <br>';
+        $result = $message . 'success';
+        return view('result')->with(['result' => $result]);
     }
 
     public function fail($message = null)
@@ -151,8 +152,8 @@ class BaseRepository implements RepositoryInterface
 
     public function denied_permission()
     {
-        return 'not your role <br> ';
+        $result = 'not your role';
+        return view('result')->with(['result' => $result]);
     }
-
 
 }
